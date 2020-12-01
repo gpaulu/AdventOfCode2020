@@ -1,5 +1,21 @@
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
+
 fn main() {
-    println!("Hello, world!");
+    let f = File::open("input.txt").expect("No input.txt file found");
+    let reader = BufReader::new(f);
+
+    let nums: Vec<i32> = reader
+        .lines()
+        .map(|s| s.unwrap().parse().unwrap())
+        .collect();
+
+    match find_sum_2020(nums) {
+        Some((x, y)) => println!("Answer: {} * {} = {}", x, y, x * y),
+        None => println!("No pair adds to 2020"),
+    }
 }
 
 // returns smaller number first
