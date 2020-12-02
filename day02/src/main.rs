@@ -15,6 +15,9 @@ impl PasswordPolicy {
         mandated_char_count >= self.at_least as usize
             && mandated_char_count <= self.at_most as usize
     }
+    fn is_valid_policy2(&self) -> bool {
+        unimplemented!();
+    }
 }
 
 #[derive(Debug, derive_more::Display, derive_more::From)]
@@ -116,5 +119,29 @@ mod tests {
     fn part2_example() {
         let input = "1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc";
         assert_eq!(num_passwords_valid_part2(input), 1);
+    }
+    #[test]
+    fn part2_example_policies() {
+        let policy1 = PasswordPolicy {
+            mandated_char: 'a',
+            at_least: 1,
+            at_most: 3,
+            password: "abcde".into(),
+        };
+        assert_eq!(policy1.is_valid_policy2(), true);
+        let policy2 = PasswordPolicy {
+            mandated_char: 'b',
+            at_least: 1,
+            at_most: 3,
+            password: "cdefg".into(),
+        };
+        assert_eq!(policy2.is_valid_policy2(), false);
+        let policy3 = PasswordPolicy {
+            mandated_char: 'c',
+            at_least: 2,
+            at_most: 9,
+            password: "ccccccccc".into(),
+        };
+        assert_eq!(policy3.is_valid_policy2(), false);
     }
 }
