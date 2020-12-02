@@ -64,6 +64,10 @@ fn num_passwords_valid(passwords: &str) -> usize {
         .count()
 }
 
+fn num_passwords_valid_part2(passwords: &str) -> usize {
+    unimplemented!();
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -106,5 +110,11 @@ mod tests {
             password: "abcdeaaaaa".into(),
         };
         assert_eq!(policy.is_valid(), false);
+    }
+
+    #[test]
+    fn part2_example() {
+        let input = "1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc";
+        assert_eq!(num_passwords_valid_part2(input), 1);
     }
 }
