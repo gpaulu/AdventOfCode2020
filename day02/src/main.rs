@@ -50,17 +50,27 @@ impl FromStr for PasswordPolicy {
 
 fn main() {
     let input = read_to_string("input.txt").expect("failed to read input file");
+    println!("Part1:");
     println!("There are {} valid passwords", num_passwords_valid(&input));
+    println!("Part2: ");
+    println!(
+        "There are {} valid passwords",
+        num_passwords_valid_part2(&input)
+    );
 }
 
 fn num_passwords_valid(passwords: &str) -> usize {
+    num_passwords_valid_with_policy(passwords, PasswordPolicy::is_valid)
+}
+
+fn num_passwords_valid_with_policy(
+    passwords: &str,
+    validation: impl Fn(&PasswordPolicy) -> bool,
+) -> usize {
     passwords
         .lines()
         .filter_map(|s| {
-            let valid = s
-                .parse::<PasswordPolicy>()
-                .expect("policy parse failed")
-                .is_valid();
+            let valid = validation(&s.parse::<PasswordPolicy>().expect("policy parse failed"));
             if valid {
                 Some(())
             } else {
@@ -71,7 +81,7 @@ fn num_passwords_valid(passwords: &str) -> usize {
 }
 
 fn num_passwords_valid_part2(passwords: &str) -> usize {
-    unimplemented!();
+    num_passwords_valid_with_policy(passwords, PasswordPolicy::is_valid_policy2)
 }
 
 #[cfg(test)]
