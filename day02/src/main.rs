@@ -16,7 +16,10 @@ impl PasswordPolicy {
             && mandated_char_count <= self.at_most as usize
     }
     fn is_valid_policy2(&self) -> bool {
-        unimplemented!();
+        let index1 = self.at_least - 1;
+        let index2 = self.at_most - 1;
+        (self.password.as_bytes()[index1 as usize] as char == self.mandated_char)
+            ^ (self.password.as_bytes()[index2 as usize] as char == self.mandated_char)
     }
 }
 
