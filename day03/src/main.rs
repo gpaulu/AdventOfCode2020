@@ -3,7 +3,10 @@ fn main() {
 }
 
 fn count_trees_with_slope(forest: &str, right: i32, down: i32) -> usize {
-    todo!();
+    forest::Forest::new(forest)
+        .iter(right, down)
+        .filter(|item| **item == forest::Lot::Tree)
+        .count()
 }
 
 mod forest {
