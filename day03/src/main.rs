@@ -52,16 +52,6 @@ mod forest {
         }
     }
 
-    // impl<'a> IntoIterator for &'a Forest {
-    //     type Item = &'a Lot;
-
-    //     type IntoIter = ForestIter<'a>;
-
-    //     fn into_iter(self) -> Self::IntoIter {
-    //         self.iter()
-    //     }
-    // }
-
     #[derive(Debug)]
     pub struct ForestIter<'a> {
         forest: &'a Forest,
