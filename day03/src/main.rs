@@ -1,5 +1,9 @@
+use std::fs::read_to_string;
+
 fn main() {
-    println!("Hello, world!");
+    let input = read_to_string("input.txt").expect("error reading input file");
+    let trees = count_trees_with_slope(&input, 3, 1);
+    println!("{} trees", trees);
 }
 
 fn count_trees_with_slope(forest: &str, right: i32, down: i32) -> usize {
