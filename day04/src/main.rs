@@ -5,7 +5,10 @@ fn main() {
 }
 
 fn count_valid_passports(passports: &str) -> usize {
-    todo!();
+    passports
+        .split("\n\n")
+        .filter_map(|s| passport::Passport::from_str(s).ok())
+        .count()
 }
 
 mod passport {
