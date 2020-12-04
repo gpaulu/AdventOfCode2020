@@ -114,10 +114,67 @@ fn validate_eyr(expiration_year: Option<String>) -> Result<i32> {
     Ok(i)
 }
 fn validate_hgt(height: Option<String>) -> Result<Height> {
-    todo!()
+    //not really happy with this
+    let height = height.ok_or(PassportError {})?;
+    println!("height is ok");
+    let unit = height
+        .as_bytes()
+        .iter()
+        .rev()
+        .take(2)
+        .rev()
+        .cloned()
+        .collect::<Vec<_>>();
+    let value = height
+        .as_bytes()
+        .iter()
+        .rev()
+        .skip(2)
+        .rev()
+        .cloned()
+        .collect::<Vec<_>>();
+    let value = std::str::from_utf8(value.as_slice())
+        .map_err(|_| PassportError {})?
+        .parse::<i32>()
+        .map_err(|_| PassportError {})?;
+    Ok(match unit.as_slice() {
+        b"cm" => {
+            if value < 150 || value > 193 {
+                return Err(PassportError {});
+            } else {
+                Height::Cm(value)
+            }
+        }
+        b"in" => {
+            if value < 59 || value > 76 {
+                return Err(PassportError {});
+            } else {
+                Height::Inch(value)
+            }
+        }
+        _ => return Err(PassportError {}),
+    })
 }
 fn validate_hcl(hair_color: Option<String>) -> Result<String> {
-    todo!()
+    let hair_color = hair_color.ok_or(PassportError {})?;
+    if hair_color.len() != 7 {
+        return Err(PassportError {});
+    }
+    let iter = hair_color.as_bytes().iter().cloned().enumerate();
+    for (i, c) in iter {
+        if i == 0 {
+            if c != b'#' {
+                return Err(PassportError {});
+            }
+            continue;
+        }
+        match c {
+            b'0'..=b'9' => continue,
+            b'a'..=b'f' => continue,
+            _ => return Err(PassportError {}),
+        }
+    }
+    Ok(hair_color)
 }
 fn validate_ecl(eye_color: Option<String>) -> Result<EyeColor> {
     Ok(match eye_color.ok_or(PassportError {})?.as_str() {
@@ -132,7 +189,18 @@ fn validate_ecl(eye_color: Option<String>) -> Result<EyeColor> {
     })
 }
 fn validate_pid(passport_id: Option<String>) -> Result<String> {
-    todo!()
+    let passport_id = passport_id.ok_or(PassportError {})?;
+    if passport_id.len() != 9 {
+        return Err(PassportError {});
+    }
+    let iter = passport_id.as_bytes().iter().cloned();
+    for c in iter {
+        match c {
+            b'0'..=b'9' => continue,
+            _ => return Err(PassportError {}),
+        }
+    }
+    Ok(passport_id)
 }
 
 impl FromStr for Passport {
