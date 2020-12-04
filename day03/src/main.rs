@@ -13,6 +13,10 @@ fn count_trees_with_slope(forest: &str, right: i32, down: i32) -> usize {
         .count()
 }
 
+fn product_of_trees_in_paths(forest: &str, paths: &[(i32, i32)]) -> usize {
+    todo!()
+}
+
 mod forest {
     #[derive(Debug, PartialEq, Eq)]
     pub enum Lot {
@@ -143,5 +147,21 @@ mod tests {
         assert_eq!(*iter.next().unwrap(), forest::Lot::Tree);
         assert_eq!(*iter.next().unwrap(), forest::Lot::Tree);
         assert!(iter.next().is_none());
+    }
+    #[test]
+    fn part2_example() {
+        let input = "..##.......
+#...#...#..
+.#....#..#.
+..#.#...#.#
+.#...##..#.
+..#.##.....
+.#.#.#....#
+.#........#
+#.##...#...
+#...##....#
+.#..#...#.#";
+        let paths = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+        assert_eq!(product_of_trees_in_paths(input, &paths), 336);
     }
 }
