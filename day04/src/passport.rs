@@ -151,11 +151,31 @@ mod tests {
     }
     #[test]
     fn validated_iyr() {
-        todo!()
+        assert_eq!(validate_iyr(Some("2011".into())).unwrap(), 2011);
+        assert_eq!(validate_iyr(Some("2010".into())).unwrap(), 2010);
+        assert_eq!(validate_iyr(Some("2020".into())).unwrap(), 2020);
+        assert_eq!(
+            validate_iyr(Some("2009".into())).unwrap_err(),
+            PassportError {}
+        );
+        assert_eq!(
+            validate_iyr(Some("2021".into())).unwrap_err(),
+            PassportError {}
+        );
     }
     #[test]
     fn validated_eyr() {
-        todo!()
+        assert_eq!(validate_eyr(Some("2021".into())).unwrap(), 2021);
+        assert_eq!(validate_eyr(Some("2020".into())).unwrap(), 2020);
+        assert_eq!(validate_eyr(Some("2030".into())).unwrap(), 2030);
+        assert_eq!(
+            validate_eyr(Some("2019".into())).unwrap_err(),
+            PassportError {}
+        );
+        assert_eq!(
+            validate_eyr(Some("2031".into())).unwrap_err(),
+            PassportError {}
+        );
     }
     #[test]
     fn validated_hgt() {
@@ -190,6 +210,7 @@ mod tests {
             PassportError {}
         );
     }
+    #[test]
     fn validated_pid() {
         assert_eq!(validate_pid(Some("000000001".into())).unwrap(), "000000001");
         assert_eq!(
