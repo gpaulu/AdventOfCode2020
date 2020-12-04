@@ -1,9 +1,17 @@
 use std::fs::read_to_string;
 
+const PATHS: &[(i32, i32)] = &[(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+
 fn main() {
     let input = read_to_string("input.txt").expect("error reading input file");
+
+    println!("Part 1:");
     let trees = count_trees_with_slope(&input, 3, 1);
     println!("{} trees", trees);
+
+    println!("Part2:");
+    let product = product_of_trees_in_paths(&input, PATHS);
+    println!("product is: {}", product);
 }
 
 fn count_trees_with_slope(forest: &str, right: i32, down: i32) -> usize {
@@ -169,7 +177,6 @@ mod tests {
 #.##...#...
 #...##....#
 .#..#...#.#";
-        let paths = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
-        assert_eq!(product_of_trees_in_paths(input, &paths), 336);
+        assert_eq!(product_of_trees_in_paths(input, PATHS), 336);
     }
 }
