@@ -1,7 +1,8 @@
-use std::str::FromStr;
+use std::{fs::read_to_string, str::FromStr};
 
 fn main() {
-    println!("Hello, world!");
+    let input = read_to_string("input.txt").expect("error reading input file");
+    println!("{} valid \"passports\" ;)", count_valid_passports(&input));
 }
 
 fn count_valid_passports(passports: &str) -> usize {
