@@ -96,10 +96,22 @@ fn validate_byr(birth_year: Option<String>) -> Result<i32> {
     Ok(i)
 }
 fn validate_iyr(issue_year: Option<String>) -> Result<i32> {
-    todo!()
+    let i: i32 = issue_year
+        .and_then(|s| s.parse().ok())
+        .ok_or(PassportError {})?;
+    if i < 2010 || i > 2020 {
+        return Err(PassportError {});
+    }
+    Ok(i)
 }
 fn validate_eyr(expiration_year: Option<String>) -> Result<i32> {
-    todo!()
+    let i: i32 = expiration_year
+        .and_then(|s| s.parse().ok())
+        .ok_or(PassportError {})?;
+    if i < 2020 || i > 2030 {
+        return Err(PassportError {});
+    }
+    Ok(i)
 }
 fn validate_hgt(height: Option<String>) -> Result<Height> {
     todo!()
@@ -108,7 +120,16 @@ fn validate_hcl(hair_color: Option<String>) -> Result<String> {
     todo!()
 }
 fn validate_ecl(eye_color: Option<String>) -> Result<EyeColor> {
-    todo!()
+    Ok(match eye_color.ok_or(PassportError {})?.as_str() {
+        "amb" => EyeColor::Amb,
+        "blu" => EyeColor::Blu,
+        "brn" => EyeColor::Brn,
+        "gry" => EyeColor::Gry,
+        "grn" => EyeColor::Grn,
+        "hzl" => EyeColor::Hzl,
+        "oth" => EyeColor::Oth,
+        _ => return Err(PassportError {}),
+    })
 }
 fn validate_pid(passport_id: Option<String>) -> Result<String> {
     todo!()
