@@ -7,14 +7,22 @@ fn main() {
 }
 
 fn count_trees_with_slope(forest: &str, right: i32, down: i32) -> usize {
-    forest::Forest::new(forest)
+    count_trees(&forest::Forest::new(forest), right, down)
+}
+
+fn count_trees(forest: &forest::Forest, right: i32, down: i32) -> usize {
+    forest
         .iter(right, down)
         .filter(|item| **item == forest::Lot::Tree)
         .count()
 }
 
 fn product_of_trees_in_paths(forest: &str, paths: &[(i32, i32)]) -> usize {
-    todo!()
+    let forest = forest::Forest::new(forest);
+    paths
+        .iter()
+        .map(|(right, down)| count_trees(&forest, *right, *down))
+        .product()
 }
 
 mod forest {
