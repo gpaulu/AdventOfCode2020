@@ -53,6 +53,10 @@ pub enum EyeColor {
     Oth,
 }
 
+//probably could have saved some headache in debugging by not cutting this corner
+//If I'm not going to do proper error handling, it is probably better to just `unwrap`
+//  rather than a unit error that throws away all context
+//Or use Box<Error>
 #[derive(Debug, Eq, PartialEq)]
 pub struct PassportError {}
 
