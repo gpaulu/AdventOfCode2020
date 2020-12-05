@@ -50,6 +50,15 @@ fn decode_boarding_pass(pass: &str) -> Seat {
     Seat { row, column, id }
 }
 
+fn max_seat_id(passes: &str) -> i32 {
+    passes
+        .lines()
+        .map(decode_boarding_pass)
+        .max_by_key(|seat| seat.id)
+        .unwrap()
+        .id
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -92,5 +101,10 @@ mod tests {
             },
             decode_boarding_pass(pass)
         );
+    }
+    #[test]
+    fn found_max_seat_id() {
+        let passes = "FBFBBFFRLR\nBFFFBBFRRR\nFFFBBBFRRR\nBBFFBBFRLL\n";
+        assert_eq!(max_seat_id(passes), 820);
     }
 }
