@@ -15,7 +15,10 @@ fn count_valid_passports(passports: &str) -> usize {
 }
 
 fn count_valid_passports_part2(passports: &str) -> usize {
-    todo!()
+    passports
+        .split("\n\n")
+        .filter_map(|s| passport::ValidatedPassport::from_str(s).ok())
+        .count()
 }
 
 #[cfg(test)]
