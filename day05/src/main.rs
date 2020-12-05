@@ -1,5 +1,8 @@
+use std::fs::read_to_string;
+
 fn main() {
-    println!("Hello, world!");
+    let passes = read_to_string("input.txt").expect("error reading input file");
+    println!("Max seat id: {}", max_seat_id(&passes));
 }
 
 #[derive(Debug, Eq, PartialEq)]
