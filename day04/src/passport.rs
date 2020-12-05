@@ -27,11 +27,11 @@ struct PassportBuilder {
 #[derive(Debug, Eq, PartialEq)]
 pub struct ValidatedPassport {
     pub birth_year: i32,
-    pub issue_year: String,
-    pub expiration_year: String,
-    pub height: String,
+    pub issue_year: i32,
+    pub expiration_year: i32,
+    pub height: Height,
     pub hair_color: String,
-    pub eye_color: String,
+    pub eye_color: EyeColor,
     pub passport_id: String,
     pub country_id: Option<String>,
 }
@@ -75,12 +75,12 @@ impl PassportBuilder {
     fn build_validated(self) -> Result<ValidatedPassport> {
         Ok(ValidatedPassport {
             birth_year: validate_byr(self.birth_year)?,
-            issue_year: self.issue_year.ok_or(PassportError {})?,
-            expiration_year: self.expiration_year.ok_or(PassportError {})?,
-            height: self.height.ok_or(PassportError {})?,
-            hair_color: self.hair_color.ok_or(PassportError {})?,
-            eye_color: self.eye_color.ok_or(PassportError {})?,
-            passport_id: self.passport_id.ok_or(PassportError {})?,
+            issue_year: validate_iyr(self.issue_year)?,
+            expiration_year: validate_eyr(self.expiration_year)?,
+            height: validate_hgt(self.height)?,
+            hair_color: validate_hcl(self.hair_color)?,
+            eye_color: validate_ecl(self.eye_color)?,
+            passport_id: validate_pid(self.passport_id)?,
             country_id: self.country_id,
         })
     }
@@ -203,7 +203,7 @@ fn validate_pid(passport_id: Option<String>) -> Result<String> {
     Ok(passport_id)
 }
 
-impl FromStr for Passport {
+impl FromStr for PassportBuilder {
     type Err = PassportError;
 
     fn from_str(s: &str) -> Result<Self> {
@@ -222,7 +222,23 @@ impl FromStr for Passport {
                 _ => return Err(PassportError {}),
             }
         }
-        builder.build()
+        Ok(builder)
+    }
+}
+
+impl FromStr for Passport {
+    type Err = PassportError;
+
+    fn from_str(s: &str) -> Result<Self> {
+        PassportBuilder::from_str(s)?.build()
+    }
+}
+
+impl FromStr for ValidatedPassport {
+    type Err = PassportError;
+
+    fn from_str(s: &str) -> Result<Self> {
+        PassportBuilder::from_str(s)?.build_validated()
     }
 }
 
@@ -349,6 +365,99 @@ iyr:2011 ecl:brn hgt:59in";
         assert_eq!(
             validate_hcl(Some("0123456789".into())).unwrap_err(),
             PassportError {}
+        );
+    }
+    #[test]
+    fn passports_invalid() {
+        let pstr = "eyr:1972 cid:100
+hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926";
+        assert_eq!(
+            PassportError {},
+            ValidatedPassport::from_str(pstr).unwrap_err()
+        );
+        let pstr = "iyr:2019
+hcl:#602927 eyr:1967 hgt:170cm
+ecl:grn pid:012533040 byr:1946";
+        assert_eq!(
+            PassportError {},
+            ValidatedPassport::from_str(pstr).unwrap_err()
+        );
+        let pstr = "hcl:dab227 iyr:2012
+ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277";
+        assert_eq!(
+            PassportError {},
+            ValidatedPassport::from_str(pstr).unwrap_err()
+        );
+        let pstr = "hgt:59cm ecl:zzz
+eyr:2038 hcl:74454a iyr:2023
+pid:3556412378 byr:2007";
+        assert_eq!(
+            PassportError {},
+            ValidatedPassport::from_str(pstr).unwrap_err()
+        );
+    }
+    #[test]
+    fn passports_valid() {
+        let pstr = "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
+hcl:#623a2f";
+        assert_eq!(
+            ValidatedPassport {
+                birth_year: 1980,
+                issue_year: 2012,
+                expiration_year: 2030,
+                height: Height::Inch(74),
+                hair_color: "#623a2f".into(),
+                eye_color: EyeColor::Grn,
+                passport_id: "087499704".into(),
+                country_id: None
+            },
+            ValidatedPassport::from_str(pstr).unwrap()
+        );
+        let pstr = "eyr:2029 ecl:blu cid:129 byr:1989
+iyr:2014 pid:896056539 hcl:#a97842 hgt:165cm";
+        assert_eq!(
+            ValidatedPassport {
+                birth_year: 1989,
+                issue_year: 2014,
+                expiration_year: 2029,
+                height: Height::Cm(165),
+                hair_color: "#a97842".into(),
+                eye_color: EyeColor::Blu,
+                passport_id: "896056539".into(),
+                country_id: Some("129".into())
+            },
+            ValidatedPassport::from_str(pstr).unwrap()
+        );
+        let pstr = "hcl:#888785
+hgt:164cm byr:2001 iyr:2015 cid:88
+pid:545766238 ecl:hzl
+eyr:2022";
+        assert_eq!(
+            ValidatedPassport {
+                birth_year: 2001,
+                issue_year: 2015,
+                expiration_year: 2022,
+                height: Height::Cm(164),
+                hair_color: "#888785".into(),
+                eye_color: EyeColor::Hzl,
+                passport_id: "545766238".into(),
+                country_id: Some("88".into())
+            },
+            ValidatedPassport::from_str(pstr).unwrap()
+        );
+        let pstr = "iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719";
+        assert_eq!(
+            ValidatedPassport {
+                birth_year: 1944,
+                issue_year: 2010,
+                expiration_year: 2021,
+                height: Height::Cm(158),
+                hair_color: "#b6652a".into(),
+                eye_color: EyeColor::Blu,
+                passport_id: "093154719".into(),
+                country_id: None
+            },
+            ValidatedPassport::from_str(pstr).unwrap()
         );
     }
 }
