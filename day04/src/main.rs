@@ -4,7 +4,13 @@ mod passport;
 
 fn main() {
     let input = read_to_string("input.txt").expect("error reading input file");
+    println!("Part 1:");
     println!("{} valid \"passports\" ;)", count_valid_passports(&input));
+    println!("Part 2:");
+    println!(
+        "{} super valid \"passports\" ;)",
+        count_valid_passports_part2(&input)
+    );
 }
 
 fn count_valid_passports(passports: &str) -> usize {

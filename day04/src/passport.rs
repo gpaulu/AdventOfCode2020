@@ -116,7 +116,6 @@ fn validate_eyr(expiration_year: Option<String>) -> Result<i32> {
 fn validate_hgt(height: Option<String>) -> Result<Height> {
     //not really happy with this
     let height = height.ok_or(PassportError {})?;
-    println!("height is ok");
     let unit = height
         .as_bytes()
         .iter()
