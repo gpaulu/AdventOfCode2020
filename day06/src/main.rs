@@ -1,7 +1,8 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, fs::read_to_string};
 
 fn main() {
-    println!("Hello, world!");
+    let input = read_to_string("input.txt").expect("error reading input file");
+    println!("Total yes answers: {}", sum_groups_yes(&input));
 }
 
 fn sum_groups_yes(answers: &str) -> usize {
