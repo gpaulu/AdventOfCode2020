@@ -2,7 +2,10 @@ use std::fs::read_to_string;
 
 fn main() {
     let passes = read_to_string("input.txt").expect("error reading input file");
+    println!("Part 1: ");
     println!("Max seat id: {}", max_seat_id(&passes));
+    println!("Part 2: ");
+    println!("My seat is: {}", find_empty_seat_id(&passes).unwrap());
 }
 
 #[derive(Debug, Eq, PartialEq, Copy, Clone)]
