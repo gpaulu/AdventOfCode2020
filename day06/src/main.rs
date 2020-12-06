@@ -5,7 +5,10 @@ fn main() {
 }
 
 fn sum_groups_yes(answers: &str) -> usize {
-    todo!()
+    answers
+        .split("\n\n")
+        .map(num_yes_to_questions_in_group)
+        .sum()
 }
 
 fn num_yes_to_questions_in_group(answers: &str) -> usize {
