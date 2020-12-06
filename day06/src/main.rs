@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -7,7 +9,11 @@ fn sum_groups_yes(answers: &str) -> usize {
 }
 
 fn num_yes_to_questions_in_group(answers: &str) -> usize {
-    todo!();
+    let mut set = HashSet::new();
+    for question in answers.chars().filter(|c| !c.is_whitespace()) {
+        set.insert(question);
+    }
+    set.len()
 }
 
 #[cfg(test)]
