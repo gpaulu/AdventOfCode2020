@@ -93,20 +93,20 @@ b";
     #[test]
     fn part2_single_group() {
         let input = "abc";
-        assert_eq!(num_yes_to_questions_in_group(input), 3);
+        assert_eq!(num_all_yes_to_questions_in_group(input), 3);
         let input = "a
 b
 c";
-        assert_eq!(num_yes_to_questions_in_group(input), 0);
+        assert_eq!(num_all_yes_to_questions_in_group(input), 0);
         let input = "ab
 ac";
-        assert_eq!(num_yes_to_questions_in_group(input), 1);
+        assert_eq!(num_all_yes_to_questions_in_group(input), 1);
         let input = "a
 a
 a
 a";
-        assert_eq!(num_yes_to_questions_in_group(input), 1);
+        assert_eq!(num_all_yes_to_questions_in_group(input), 1);
         let input = "b";
-        assert_eq!(num_yes_to_questions_in_group(input), 1);
+        assert_eq!(num_all_yes_to_questions_in_group(input), 1);
     }
 }
