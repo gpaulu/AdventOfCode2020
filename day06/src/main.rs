@@ -36,8 +36,8 @@ fn num_all_yes_to_questions_in_group(answers: &str) -> usize {
 }
 
 // `HashSet` has fn `intersection` but only gives the result for 2 sets
-// This fn takes an iterator of `HashSet`s and returns `Some` iterator of intersecting elements
-// returns `None` if input iterator `sets` results in 0 `HashSet`s
+// This fn takes a slice of `HashSet`s and returns `Some` iterator of intersecting elements
+// returns `None` if input `sets` contains 0 `HashSet`s
 fn intersection_many_sets<'iter, T>(
     sets: &'iter [HashSet<T>],
 ) -> Option<impl Iterator<Item = &'iter T>>
