@@ -17,6 +17,10 @@ fn num_colors_can_contain(rules: &str, color: &str) -> usize {
         .count()
 }
 
+fn num_total_bags_inside(rules: &str, color: &str) -> usize {
+    todo!()
+}
+
 fn parse_rules(rules: &str) -> Graph {
     let mut graph = Graph::default();
     for rule in rules.lines() {
@@ -89,5 +93,30 @@ muted yellow bags contain no other bags.";
         g.extend_with_edges(&[(lr, by, 1), (lr, my, 2)]);
         let rules = parse_rules(input).graph;
         assert_eq!(rules.node_count(), g.node_count());
+    }
+
+    #[test]
+    fn part2_example() {
+        let input = "light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags.";
+        assert_eq!(num_total_bags_inside(input, "shiny gold"), 32);
+    }
+    #[test]
+    fn part2_example2() {
+        let input = "shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags.";
+        assert_eq!(num_total_bags_inside(input, "shiny gold"), 126);
     }
 }
