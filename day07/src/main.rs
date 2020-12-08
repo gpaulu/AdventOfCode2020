@@ -4,8 +4,12 @@ use petgraph::{prelude::*, visit::Walker};
 
 fn main() {
     let input = read_to_string("input.txt").expect("Error reading input file");
+    println!("Part 1:");
     let num_can_contain = num_colors_can_contain(&input, "shiny gold");
     println!("{} bags could contain a shiny gold", num_can_contain);
+    println!("Part 2:");
+    let bags_needed = num_total_bags_inside(&input, "shiny gold");
+    println!("I need {} bags inside my shiny gold bag", bags_needed);
 }
 
 fn num_colors_can_contain(rules: &str, color: &str) -> usize {
