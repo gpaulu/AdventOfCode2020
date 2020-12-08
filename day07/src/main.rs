@@ -1,9 +1,11 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fs::read_to_string};
 
 use petgraph::{prelude::*, visit::Walker};
 
 fn main() {
-    println!("Hello, world!");
+    let input = read_to_string("input.txt").expect("Error reading input file");
+    let num_can_contain = num_colors_can_contain(&input, "shiny gold");
+    println!("{} bags could contain a shiny gold", num_can_contain);
 }
 
 fn num_colors_can_contain(rules: &str, color: &str) -> usize {
