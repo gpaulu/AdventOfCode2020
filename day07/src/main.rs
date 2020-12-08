@@ -17,8 +17,17 @@ fn num_colors_can_contain(rules: &str, color: &str) -> usize {
         .count()
 }
 
-fn num_total_bags_inside(rules: &str, color: &str) -> usize {
-    todo!()
+fn num_total_bags_inside(rules: &str, root: &str) -> usize {
+    let graph = parse_rules(rules);
+    let start = graph.get_index(root);
+    sum_bags(&graph.graph, start) - 1 //subtract 1 to not include the root bag
+}
+
+fn sum_bags(graph: &DiGraph<&str, usize>, node: NodeIndex) -> usize {
+    1 + graph // add 1 to include `node`
+        .edges(node)
+        .map(|edge| edge.weight() * sum_bags(graph, edge.target()))
+        .sum::<usize>()
 }
 
 fn parse_rules(rules: &str) -> Graph {
