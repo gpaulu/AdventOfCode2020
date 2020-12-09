@@ -37,6 +37,10 @@ fn acc_val_before_loop(program: &str) -> i32 {
     accumulator
 }
 
+fn acc_fixed(program: &str) -> i32 {
+    todo!()
+}
+
 fn parse_program(program: &str) -> Vec<ProgramLine> {
     program
         .lines()
@@ -91,5 +95,19 @@ acc +1
 jmp -4
 acc +6";
         assert_eq!(acc_val_before_loop(input), 5);
+    }
+
+    #[test]
+    fn part2_example() {
+        let input = "nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6";
+        assert_eq!(acc_fixed(input), 8);
     }
 }
