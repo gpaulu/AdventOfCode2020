@@ -126,17 +126,6 @@ impl FromStr for Program {
     }
 }
 
-fn parse_program(program: &str) -> Vec<ProgramLine> {
-    program
-        .lines()
-        .enumerate()
-        .map(|(num, line)| ProgramLine {
-            line_number: num,
-            instruction: line.parse().unwrap(),
-        })
-        .collect()
-}
-
 #[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
 struct ProgramLine {
     line_number: usize,
