@@ -1,9 +1,77 @@
+use std::{collections::HashSet, error::Error, str::FromStr};
+
+type BoxError = Box<dyn Error + Send + Sync + 'static>;
+
 fn main() {
     println!("Hello, world!");
 }
 
 fn acc_val_before_loop(program: &str) -> i32 {
-    todo!()
+    let program = parse_program(program);
+    let mut accumulator = 0;
+    let mut counter = 0usize;
+    let mut visited = HashSet::new();
+    while counter < program.len() {
+        let line = program[counter];
+        if visited.contains(&line) {
+            break;
+        } else {
+            visited.insert(line);
+        }
+        match line.instruction {
+            Instruction::Nop(_) => counter += 1,
+            Instruction::Acc(arg) => {
+                accumulator += arg;
+                counter += 1
+            }
+            Instruction::Jmp(arg) => {
+                if arg < 0 {
+                    counter -= arg.abs() as usize
+                } else {
+                    counter += arg as usize
+                }
+            }
+        }
+    }
+    accumulator
+}
+
+fn parse_program(program: &str) -> Vec<ProgramLine> {
+    program
+        .lines()
+        .enumerate()
+        .map(|(num, line)| ProgramLine {
+            line_number: num,
+            instruction: line.parse().unwrap(),
+        })
+        .collect()
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
+struct ProgramLine {
+    line_number: usize,
+    instruction: Instruction,
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
+enum Instruction {
+    Nop(i32),
+    Acc(i32),
+    Jmp(i32),
+}
+
+impl FromStr for Instruction {
+    type Err = BoxError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let arg = s[4..].parse()?;
+        Ok(match &s[..3] {
+            "nop" => Instruction::Nop(arg),
+            "acc" => Instruction::Acc(arg),
+            "jmp" => Instruction::Jmp(arg),
+            _ => panic!("Bad Instruction"),
+        })
+    }
 }
 
 #[cfg(test)]
