@@ -1,5 +1,8 @@
+use std::fs::read_to_string;
+
 fn main() {
-    println!("Hello, world!");
+    let input = read_to_string("input.txt").expect("Error reading input file");
+    println!("First XMAS outlier: {}", first_xmas_outlier(&input, 25, 25));
 }
 
 fn first_xmas_outlier(sequence: &str, preamble: usize, search_window: usize) -> usize {
