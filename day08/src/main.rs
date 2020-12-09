@@ -4,7 +4,10 @@ type BoxError = Box<dyn Error + Send + Sync + 'static>;
 
 fn main() {
     let input = read_to_string("input.txt").expect("Error reading input file");
+    println!("Part 1:");
     println!("accumulator = {}", acc_val_before_loop(&input));
+    println!("Part 2:");
+    println!("accumulator = {}", acc_fixed(&input));
 }
 
 fn acc_val_before_loop(program: &str) -> i32 {
