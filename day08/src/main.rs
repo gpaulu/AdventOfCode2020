@@ -1,9 +1,10 @@
-use std::{collections::HashSet, error::Error, str::FromStr};
+use std::{collections::HashSet, error::Error, fs::read_to_string, str::FromStr};
 
 type BoxError = Box<dyn Error + Send + Sync + 'static>;
 
 fn main() {
-    println!("Hello, world!");
+    let input = read_to_string("input.txt").expect("Error reading input file");
+    println!("accumulator = {}", acc_val_before_loop(&input));
 }
 
 fn acc_val_before_loop(program: &str) -> i32 {
