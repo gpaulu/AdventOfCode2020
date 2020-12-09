@@ -3,7 +3,27 @@ fn main() {
 }
 
 fn first_xmas_outlier(sequence: &str, preamble: usize, search_window: usize) -> usize {
-    todo!()
+    let nums: Vec<usize> = sequence
+        .lines()
+        .map(|s| s.parse::<usize>().unwrap())
+        .collect();
+    *nums
+        .iter()
+        .skip(preamble)
+        .zip(nums.windows(search_window))
+        .find(|(elem, window)| is_outlier(**elem, window))
+        .unwrap()
+        .0
+}
+
+fn is_outlier(num: usize, window: &[usize]) -> bool {
+    let mut compliant = false;
+    for (i, i_elem) in window.iter().enumerate() {
+        for j_elem in window.iter().skip(i + 1) {
+            compliant |= i_elem + j_elem == num;
+        }
+    }
+    !compliant
 }
 
 #[cfg(test)]
