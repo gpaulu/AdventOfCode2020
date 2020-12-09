@@ -13,7 +13,14 @@ fn acc_val_before_loop(program: &str) -> i32 {
 }
 
 fn acc_fixed(program: &str) -> i32 {
-    todo!()
+    let program: Program = program.parse().unwrap();
+    let results: Vec<i32> = program
+        .possible_fixed()
+        .map(|mut p| p.run())
+        .filter_map(Result::ok)
+        .collect();
+    assert_eq!(results.len(), 1);
+    results[0]
 }
 
 #[derive(Debug, Clone, Default)]
@@ -56,6 +63,47 @@ impl Program {
             self.execute_instruction();
         }
         Ok(self.accumulator)
+    }
+
+    fn possible_fixed(&self) -> FixedProgramIterator {
+        FixedProgramIterator {
+            program: self,
+            iter: self.instructions.iter().enumerate(),
+        }
+    }
+}
+
+struct FixedProgramIterator<'a> {
+    program: &'a Program,
+    iter: std::iter::Enumerate<std::slice::Iter<'a, ProgramLine>>,
+}
+
+impl<'a> Iterator for FixedProgramIterator<'a> {
+    type Item = Program;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let mut new_program = None;
+        let (mut index, mut instruction) = self.iter.next()?;
+        while new_program.is_none() {
+            match instruction.instruction {
+                Instruction::Acc(_) => {
+                    let (idx, instr) = self.iter.next()?;
+                    index = idx;
+                    instruction = instr;
+                }
+                Instruction::Nop(arg) => {
+                    let mut p = self.program.clone();
+                    p.instructions[index].instruction = Instruction::Jmp(arg);
+                    new_program = Some(p);
+                }
+                Instruction::Jmp(arg) => {
+                    let mut p = self.program.clone();
+                    p.instructions[index].instruction = Instruction::Nop(arg);
+                    new_program = Some(p);
+                }
+            }
+        }
+        new_program
     }
 }
 
