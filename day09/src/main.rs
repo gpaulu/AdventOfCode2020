@@ -2,7 +2,10 @@ use std::fs::read_to_string;
 
 fn main() {
     let input = read_to_string("input.txt").expect("Error reading input file");
+    println!("Part 1:");
     println!("First XMAS outlier: {}", first_xmas_outlier(&input, 25));
+    println!("Part 2:");
+    println!("Encryption weakness: {}", encryption_weakness(&input, 25));
 }
 
 fn first_xmas_outlier(sequence: &str, preamble: usize) -> usize {
