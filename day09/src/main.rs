@@ -6,10 +6,11 @@ fn main() {
 }
 
 fn first_xmas_outlier(sequence: &str, preamble: usize) -> usize {
-    let nums: Vec<usize> = sequence
-        .lines()
-        .map(|s| s.parse::<usize>().unwrap())
-        .collect();
+    let nums = to_vec(sequence);
+    find_xmas_outlier(&nums, preamble)
+}
+
+fn find_xmas_outlier(nums: &[usize], preamble: usize) -> usize {
     *nums
         .iter()
         .skip(preamble)
@@ -17,6 +18,13 @@ fn first_xmas_outlier(sequence: &str, preamble: usize) -> usize {
         .find(|(elem, window)| is_outlier(**elem, window))
         .unwrap()
         .0
+}
+
+fn to_vec(sequence: &str) -> Vec<usize> {
+    sequence
+        .lines()
+        .map(|s| s.parse::<usize>().unwrap())
+        .collect()
 }
 
 fn is_outlier(num: usize, window: &[usize]) -> bool {
