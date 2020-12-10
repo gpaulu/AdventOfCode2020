@@ -2,10 +2,10 @@ use std::fs::read_to_string;
 
 fn main() {
     let input = read_to_string("input.txt").expect("Error reading input file");
-    println!("First XMAS outlier: {}", first_xmas_outlier(&input, 25, 25));
+    println!("First XMAS outlier: {}", first_xmas_outlier(&input, 25));
 }
 
-fn first_xmas_outlier(sequence: &str, preamble: usize, search_window: usize) -> usize {
+fn first_xmas_outlier(sequence: &str, preamble: usize) -> usize {
     let nums: Vec<usize> = sequence
         .lines()
         .map(|s| s.parse::<usize>().unwrap())
@@ -13,7 +13,7 @@ fn first_xmas_outlier(sequence: &str, preamble: usize, search_window: usize) -> 
     *nums
         .iter()
         .skip(preamble)
-        .zip(nums.windows(search_window))
+        .zip(nums.windows(preamble))
         .find(|(elem, window)| is_outlier(**elem, window))
         .unwrap()
         .0
@@ -29,7 +29,7 @@ fn is_outlier(num: usize, window: &[usize]) -> bool {
     !compliant
 }
 
-fn encryption_weakness(sequence: &str, preamble: usize, search_window: usize) -> usize {
+fn encryption_weakness(sequence: &str, preamble: usize) -> usize {
     todo!()
 }
 
@@ -59,7 +59,7 @@ mod tests {
 277
 309
 576";
-        assert_eq!(first_xmas_outlier(input, 5, 5), 127);
+        assert_eq!(first_xmas_outlier(input, 5), 127);
     }
 
     #[test]
@@ -84,6 +84,6 @@ mod tests {
 277
 309
 576";
-        assert_eq!(encryption_weakness(input, 5, 5), 62);
+        assert_eq!(encryption_weakness(input, 5), 62);
     }
 }
