@@ -40,7 +40,10 @@ fn is_outlier(num: usize, window: &[usize]) -> bool {
 fn encryption_weakness(sequence: &str, preamble: usize) -> usize {
     let nums = to_vec(sequence);
     let outlier = find_xmas_outlier(&nums, preamble);
-    todo!()
+    let sum_set = find_contiguous_sum(outlier, &nums).unwrap();
+    let min = sum_set.iter().min().unwrap();
+    let max = sum_set.iter().max().unwrap();
+    min + max
 }
 
 fn find_contiguous_sum(num: usize, sequence: &[usize]) -> Option<&[usize]> {
