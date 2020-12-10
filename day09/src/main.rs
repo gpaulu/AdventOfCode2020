@@ -38,7 +38,24 @@ fn is_outlier(num: usize, window: &[usize]) -> bool {
 }
 
 fn encryption_weakness(sequence: &str, preamble: usize) -> usize {
+    let nums = to_vec(sequence);
+    let outlier = find_xmas_outlier(&nums, preamble);
     todo!()
+}
+
+fn find_contiguous_sum(num: usize, sequence: &[usize]) -> Option<&[usize]> {
+    for (i, i_elem) in sequence.iter().enumerate() {
+        let mut sum = *i_elem;
+        for j in i + 1..sequence.len() {
+            sum += sequence[j];
+            match sum.cmp(&num) {
+                std::cmp::Ordering::Equal => return Some(&sequence[i..=j]),
+                std::cmp::Ordering::Greater => break,
+                _ => (),
+            }
+        }
+    }
+    None
 }
 
 #[cfg(test)]
@@ -93,5 +110,32 @@ mod tests {
 309
 576";
         assert_eq!(encryption_weakness(input, 5), 62);
+    }
+
+    #[test]
+    fn part2_find_contiguous() {
+        let input = "35
+20
+15
+25
+47
+40
+62
+55
+65
+95
+102
+117
+150
+182
+127
+219
+299
+277
+309
+576";
+        let nums = to_vec(input);
+        let set = find_contiguous_sum(127, &nums).unwrap();
+        assert_eq!(set, &[15, 25, 47, 40]);
     }
 }
